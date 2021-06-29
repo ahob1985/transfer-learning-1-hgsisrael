@@ -33,7 +33,7 @@ function setup() {
   sads = 0;
 
   isModelReady = false;
-  isTrainComplete = flase;
+  isTrainingComplete = false;
 
   video = createCapture(VIDEO, videoReady);
 }
@@ -51,7 +51,7 @@ function buildButtons() {
   buttonDiv = createDiv();
   happyButton = createButton("Happy");
   happyButton.parent(buttonDiv);
-  happyButton.mousePressed(function()) {
+  happyButton.mousePressed(function() {
     happies++;
     textP.html("Happies: " + happies + " Sads: " + sads);
     classifier.addImage(canvas, "Happy");
@@ -70,12 +70,13 @@ function buildButtons() {
     textP.html("New model training, please wait...");
     classifier.train(whileTraining);
   })
-  buttonDiv.style("display", "none")
+  buttonDiv.style("display", "none");
 }
 
 function videoReady() {
+  video.style("display", "none");
   featureExtractor = ml5.featureExtractor("MobileNet", featureExtractorLoaded);
-
+  
 }
 
 function featureExtractorLoaded() {
@@ -92,12 +93,12 @@ function whileTraining(loss) {
   if(loss) {
     console.log(loss);
   }else{
-
+    isTrainingComplete = true;
   }
 }
 
 function gotResults(error, results) {
-  iff(error) {
+  if(error) {
     console.error(error);
   }else {
     let label = results[0].label;
